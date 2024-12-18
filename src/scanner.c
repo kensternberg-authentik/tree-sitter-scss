@@ -1,5 +1,5 @@
 #include "tree_sitter/parser.h"
-
+#include <stdio.h>
 #include <wctype.h>
 
 enum TokenType {
@@ -36,7 +36,7 @@ bool tree_sitter_scss_external_scanner_scan(void *payload, TSLexer *lexer,
 
     if (valid_symbols[CONCAT]) {
         if (iswalnum(lexer->lookahead) || lexer->lookahead == '#' ||
-            lexer->lookahead == '-') {
+            lexer->lookahead == '-' || lexer->lookahead == '_') {
             lexer->result_symbol = CONCAT;
             if (lexer->lookahead == '#') {
                 lexer->mark_end(lexer);
@@ -81,7 +81,8 @@ bool tree_sitter_scss_external_scanner_scan(void *payload, TSLexer *lexer,
         }
     }
 
-    bool possible_interpolation = 0;
+    bool maybe_new_interpolation = 0;
+    int interpolation_depth = 0;
 
     if (valid_symbols[PSEUDO_CLASS_SELECTOR_COLON]) {
         while (iswspace(lexer->lookahead)) {
@@ -95,24 +96,36 @@ bool tree_sitter_scss_external_scanner_scan(void *payload, TSLexer *lexer,
             lexer->mark_end(lexer);
             // We need a { to be a pseudo class selector, a ; indicates a
             // property
-            while (lexer->lookahead != ';' && lexer->lookahead != '}' &&
-                   !lexer->eof(lexer)) {
-                advance(lexer);
+            while (lexer->lookahead != ';' && !lexer->eof(lexer)) {
+                 advance(lexer);
 
-                if (lexer->lookahead == '#') {
-                    possible_interpolation = 1;
-                }
-
-                if (lexer->lookahead == '{') {
-                    if (possible_interpolation != 1) {
-                        lexer->result_symbol = PSEUDO_CLASS_SELECTOR_COLON;
-                        return true;
-                    }
-                }
-
-                if (lexer->lookahead != '#') {
-                    possible_interpolation = 0;
-                }
+                 if (lexer->lookahead == '}') {
+                     if (interpolation_depth > 0) {
+                         interpolation_depth--;
+                         continue;
+                     } else {
+                         break;
+                     }
+                 }
+                 
+                 if ((maybe_new_interpolation) && (lexer->lookahead == '{')) {
+                     interpolation_depth++;
+                     maybe_new_interpolation = 0; // It gets one char to prove it's an interpolation.
+                     continue;
+                 }
+                 
+                 if (lexer->lookahead == '#') {
+                     maybe_new_interpolation = 1;
+                     continue;
+                 }
+                 
+                 // Done worrying about entering an interpolation
+                 maybe_new_interpolation = 0;
+                 
+                 if (lexer->lookahead == '{' && interpolation_depth == 0) {
+                     lexer->result_symbol = PSEUDO_CLASS_SELECTOR_COLON;
+                     return true;
+                 }
             }
             return false;
         }

@@ -1,0 +1,11 @@
+==============================
+If expression with interpolation
+==============================
+
+.a {
+   foo: if($a, b-#{$c}, "");
+}
+
+---
+
+(stylesheet)

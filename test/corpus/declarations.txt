@@ -233,7 +233,11 @@ a {
         (string_value))
       (declaration
         (property_name)
-        (string_value)))))
+        (string_value
+          (escape_sequence)
+          (string_content)
+          (escape_sequence))))))
+
 
 ============================
 URLs
@@ -491,15 +495,17 @@ Mixins with at-root
         (variable)))
     (block
       (at_root_statement
-        (interpolation
-          (call_expression
-            (function_name)
-            (arguments
-              (nesting_selector)
-              (variable))))
+        (tag_name
+          (interpolation
+            (call_expression
+              (function_name)
+              (arguments
+                (nesting_selector)
+                (variable)))))
         (block
           (at_rule
             (at_keyword)))))))
+
 
 =================================
 Placeholders

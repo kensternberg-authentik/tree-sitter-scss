@@ -15,23 +15,28 @@ Import statements
     (call_expression
       (function_name)
       (arguments
-        (string_value)))
+        (string_value
+          (string_content))))
     (keyword_query))
   (import_statement
     (call_expression
       (function_name)
       (arguments
-        (string_value)))
+        (string_value
+          (string_content))))
     (keyword_query))
   (import_statement
-    (string_value))
+    (string_value
+      (string_content)))
   (import_statement
     (call_expression
       (function_name)
       (arguments
-        (string_value))))
+        (string_value
+          (string_content)))))
   (import_statement
-    (string_value)
+    (string_value
+      (string_content))
     (keyword_query)))
 
 ==============================
@@ -58,7 +63,8 @@ Namespace statements
       (arguments
         (plain_value))))
   (namespace_statement
-    (string_value))
+    (string_value
+      (string_content)))
   (namespace_statement
     (call_expression
       (function_name)
@@ -79,7 +85,8 @@ Namespace statements
         (plain_value))))
   (namespace_statement
     (namespace_name)
-    (string_value)))
+    (string_value
+      (string_content))))
 
 ==============================
 Keyframes statements
@@ -235,7 +242,8 @@ Charset statements
 
 (stylesheet
   (charset_statement
-    (string_value)))
+    (string_value
+      (string_content))))
 
 ==============================
 Other at-statements
@@ -254,25 +262,30 @@ Other at-statements
     (block
       (declaration
         (property_name)
-        (string_value))
+        (string_value
+          (string_content)))
       (declaration
         (property_name)
         (call_expression
           (function_name)
           (arguments
-            (string_value)))
+            (string_value
+              (string_content))))
         (call_expression
           (function_name)
           (arguments
-            (string_value)))
+            (string_value
+              (string_content))))
         (call_expression
           (function_name)
           (arguments
-            (string_value)))
+            (string_value
+              (string_content))))
         (call_expression
           (function_name)
           (arguments
-            (string_value)))))))
+            (string_value
+              (string_content))))))))
 
 ==============================
 Single-line comments
@@ -314,7 +327,8 @@ Use statements
 
 (stylesheet
   (use_statement
-    (string_value))
+    (string_value
+      (string_content)))
   (rule_set
     (selectors
       (class_selector
@@ -323,6 +337,59 @@ Use statements
       (declaration
         (property_name)
         (plain_value))
+      (declaration
+        (property_name)
+        (plain_value)))))
+
+==============================
+Use without namespace
+==============================
+
+@use '../../custom.css' as *;
+
+.inverse {
+  background-color: $primary-color;
+}
+
+---
+
+(stylesheet
+  (use_statement
+    (string_value
+      (string_content))
+    (use_namespace))
+  (rule_set
+    (selectors
+      (class_selector
+        (class_name)))
+    (block
+      (declaration
+        (property_name)
+        (variable)))))
+
+==============================
+Use with namespace
+==============================
+
+@use 'custom.css' as ns;
+
+.inverse {
+  background-color: ns.$primary-color;
+}
+
+---
+
+(stylesheet
+  (use_statement
+    (string_value
+      (string_content))
+    (use_namespace
+      (namespace)))
+  (rule_set
+    (selectors
+      (class_selector
+        (class_name)))
+    (block
       (declaration
         (property_name)
         (plain_value)))))
@@ -337,7 +404,8 @@ Forward statements
 
 (stylesheet
   (forward_statement
-    (string_value)))
+    (string_value
+      (string_content))))
 
 ==============================
 Include statements
@@ -367,6 +435,58 @@ Include statements
           (argument
             (variable)
             (plain_value)))))))
+
+==============================
+Include statements with spaces in value
+==============================
+
+.foo {
+  @include transform($margin: 10px 20px);
+}
+
+---
+
+(stylesheet
+  (rule_set
+    (selectors
+      (class_selector
+        (class_name)))
+    (block
+      (include_statement
+        (identifier)
+        (arguments
+          (argument
+            (variable)
+              (integer_value
+                (unit))
+              (integer_value
+                (unit))))))))
+
+==============================
+Include statements with extra whitespace
+==============================
+
+.foo {
+  @include transform( $margin: 10px 20px );
+}
+
+---
+
+(stylesheet
+  (rule_set
+    (selectors
+      (class_selector
+        (class_name)))
+    (block
+      (include_statement
+        (identifier)
+        (arguments
+          (argument
+            (variable)
+              (integer_value
+                (unit))
+              (integer_value
+                (unit))))))))
 
 ==============================
 Extend statements
@@ -432,7 +552,8 @@ article[role="main"] {
       (attribute_selector
         (tag_name)
         (attribute_name)
-        (string_value)))
+        (string_value
+          (string_content))))
     (block
       (declaration
         (property_name)
@@ -771,8 +892,11 @@ Logging statements
     name: (identifier)
     (block
       (debug_statement
-        (string_value))
+        (string_value
+          (string_content)))
       (warn_statement
-        (string_value))
+        (string_value
+          (string_content)))
       (error_statement
-        (string_value)))))
+        (string_value
+          (string_content))))))
