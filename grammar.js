@@ -92,7 +92,7 @@ module.exports = grammar(CSS, {
         ':',
         $._value,
         repeat(seq(optional(','), $._value)),
-        optional($.important),
+        optional(choice($.important, $.default)),
         ';',
       ),
 
@@ -155,6 +155,8 @@ module.exports = grammar(CSS, {
     debug_statement: ($) => seq('@debug', $._value, ';'),
 
     at_root_statement: ($) => seq('@at-root', $._selector, $.block),
+
+    default: (_) => '!default',
 
     if_statement: ($) =>
       seq(

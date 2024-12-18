@@ -1487,8 +1487,17 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "SYMBOL",
-              "name": "important"
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "important"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "default"
+                }
+              ]
             },
             {
               "type": "BLANK"
@@ -2935,6 +2944,10 @@
           "name": "block"
         }
       ]
+    },
+    "default": {
+      "type": "STRING",
+      "value": "!default"
     },
     "if_statement": {
       "type": "SEQ",
