@@ -300,6 +300,26 @@ a {
         (default)))))
 
 ============================
+!Default declarations
+============================
+
+a {
+  b: c !default;
+}
+
+---
+
+(stylesheet
+  (rule_set
+    (selectors
+      (tag_name))
+    (block
+      (declaration
+        (property_name)
+        (plain_value)
+        (default)))))
+
+============================
 Declarations without trailing semicolons
 ============================
 
@@ -409,7 +429,7 @@ a {
 
 (stylesheet
   (declaration
-    (property_name)
+    (variable)
     (plain_value)
     (plain_value))
   (rule_set
@@ -417,7 +437,7 @@ a {
       (tag_name))
     (block
       (declaration
-        (property_name)
+        (variable)
         (plain_value))
       (declaration
         (property_name)

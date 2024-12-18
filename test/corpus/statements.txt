@@ -808,7 +808,7 @@ While statements
               (integer_value
                 (unit))))))
       (declaration
-        (property_name)
+        (variable)
         (binary_expression
           (variable)
           (integer_value))))))
@@ -842,7 +842,7 @@ Functions
         (variable)))
     (block
       (declaration
-        (property_name)
+        (variable)
         (integer_value))
       (for_statement
         (variable)
@@ -850,7 +850,7 @@ Functions
         (variable)
         (block
           (declaration
-            (property_name)
+            (variable)
             (binary_expression
               (variable)
               (variable)))))

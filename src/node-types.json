@@ -1200,6 +1200,10 @@
           "named": true
         },
         {
+          "type": "global",
+          "named": true
+        },
+        {
           "type": "grid_value",
           "named": true
         },
@@ -4212,6 +4216,10 @@
   },
   {
     "type": "function_name",
+    "named": true
+  },
+  {
+    "type": "global",
     "named": true
   },
   {

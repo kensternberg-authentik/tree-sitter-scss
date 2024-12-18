@@ -87,13 +87,23 @@ module.exports = grammar(CSS, {
     // Declarations
 
     declaration: ($) =>
-      seq(
-        alias(choice($.identifier, $.variable, $._concatenated_identifier), $.property_name),
-        ':',
-        $._value,
-        repeat(seq(optional(','), $._value)),
-        optional(choice($.important, $.default)),
-        ';',
+      choice(
+        seq(
+          $.variable,
+          ':',
+          $._value,
+          repeat(seq(optional(','), $._value)),
+          optional(choice($.global)),
+          ';',
+        ),
+        seq(
+          alias(choice($.identifier, $._concatenated_identifier), $.property_name),
+          ':',
+          $._value,
+          repeat(seq(optional(','), $._value)),
+          optional(choice($.important, $.default)),
+          ';',
+        ),
       ),
 
     // Media queries
@@ -157,6 +167,8 @@ module.exports = grammar(CSS, {
     at_root_statement: ($) => seq('@at-root', $._selector, $.block),
 
     default: (_) => '!default',
+
+    global: (_) => '!global',
 
     if_statement: ($) =>
       seq(
