@@ -3282,6 +3282,10 @@
         }
       ]
     },
+    "_concatenated_identifier_token": {
+      "type": "PATTERN",
+      "value": "(--|-?[0-9a-zA-Z_\\xA0-\\xFF])[a-zA-Z0-9-_\\xA0-\\xFF]*"
+    },
     "_concatenated_identifier": {
       "type": "CHOICE",
       "members": [
@@ -3309,8 +3313,13 @@
                         "name": "interpolation"
                       },
                       {
-                        "type": "SYMBOL",
-                        "name": "identifier"
+                        "type": "ALIAS",
+                        "content": {
+                          "type": "SYMBOL",
+                          "name": "_concatenated_identifier_token"
+                        },
+                        "named": true,
+                        "value": "identifier"
                       },
                       {
                         "type": "ALIAS",
@@ -3355,8 +3364,13 @@
                         "name": "interpolation"
                       },
                       {
-                        "type": "SYMBOL",
-                        "name": "identifier"
+                        "type": "ALIAS",
+                        "content": {
+                          "type": "SYMBOL",
+                          "name": "_concatenated_identifier_token"
+                        },
+                        "named": true,
+                        "value": "identifier"
                       },
                       {
                         "type": "ALIAS",

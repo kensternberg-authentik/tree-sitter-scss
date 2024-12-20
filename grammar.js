@@ -259,6 +259,9 @@ module.exports = grammar(CSS, {
 
     placeholder: $ => seq('%', $.identifier),
 
+    _concatenated_identifier_token: _ =>
+      /(--|-?[0-9a-zA-Z_\xA0-\xFF])[a-zA-Z0-9-_\xA0-\xFF]*/,
+
     _concatenated_identifier: $ =>
       choice(
         seq(
@@ -268,7 +271,7 @@ module.exports = grammar(CSS, {
               $._concat,
               choice(
                 $.interpolation,
-                $.identifier,
+                alias($._concatenated_identifier_token, $.identifier),
                 alias(token.immediate('-'), $.identifier),
               ),
             ),
@@ -281,7 +284,7 @@ module.exports = grammar(CSS, {
               $._concat,
               choice(
                 $.interpolation,
-                $.identifier,
+                alias($._concatenated_identifier_token, $.identifier),
                 alias(token.immediate('-'), $.identifier),
               ),
             ),
