@@ -1476,6 +1476,14 @@
                   "members": [
                     {
                       "type": "SYMBOL",
+                      "name": "important"
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "default"
+                    },
+                    {
+                      "type": "SYMBOL",
                       "name": "global"
                     }
                   ]

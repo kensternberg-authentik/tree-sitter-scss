@@ -300,11 +300,11 @@ a {
         (default)))))
 
 ============================
-!Default declarations
+!Global declarations
 ============================
 
 a {
-  b: c !default;
+  $b: c !global;
 }
 
 ---
@@ -315,9 +315,9 @@ a {
       (tag_name))
     (block
       (declaration
-        (property_name)
+        (variable)
         (plain_value)
-        (default)))))
+        (global)))))
 
 ============================
 Declarations without trailing semicolons
@@ -447,6 +447,40 @@ a {
         (integer_value
           (unit))
         (variable)))))
+
+
+=================================
+Variable with Escape Sequence
+=================================
+
+$icon: \f42c;
+
+---
+
+(stylesheet
+  (declaration
+    (variable)
+    (escape_sequence)))
+
+=================================
+Custom Property with Escape Sequence
+=================================
+
+:root {
+  --icon: \f42c;
+}
+
+---
+
+ (stylesheet
+      (rule_set
+        (selectors
+          (pseudo_class_selector
+            (class_name)))
+        (block
+          (declaration
+            (property_name)
+            (escape_sequence)))))
 
 =================================
 Mixins with no arguments
@@ -621,3 +655,146 @@ div {
                (variable))
              (identifier)))))))
 
+=============================================
+Interpolation in a selector 
+=============================================
+
+.#{$a-b}-500px {
+    content: d($b-c);
+}
+
+---
+
+(stylesheet
+  (rule_set
+    (selectors
+      (class_selector
+        (class_name
+          (interpolation
+            (variable))
+          (identifier))))
+    (block
+      (declaration
+        (property_name)
+        (call_expression
+          (function_name)
+          (arguments
+            (variable)))))))
+
+=============================================
+Interpolation with pseudoclass in a selector
+=============================================
+
+.#{$a-b}-500px:before {
+    content: d($b-c);
+}
+
+---
+
+(stylesheet
+  (rule_set
+    (selectors
+      (pseudo_class_selector
+        (class_selector
+          (class_name
+            (interpolation
+              (variable))
+            (identifier)))
+        (class_name)))
+    (block
+      (declaration
+        (property_name)
+        (call_expression
+          (function_name)
+          (arguments
+            (variable)))))))
+
+
+=============================================
+Map With Bare Key
+=============================================
+
+$map: (foo: "bar");
+
+---
+
+(stylesheet
+  (declaration
+    (variable)
+    (map_value
+      (map_pair
+        key: (plain_value)
+        value: (string_value (string_content)))
+    )
+  )
+)
+
+=============================================
+Map With String Key
+=============================================
+
+$map: ("foo": "bar");
+
+---
+
+(stylesheet
+  (declaration
+    (variable)
+    (map_value
+      (map_pair
+        key: (string_value (string_content))
+        value: (string_value (string_content)))
+    )
+  )
+)
+
+=============================================
+Map With Variable Values
+=============================================
+
+$knowledge-variants: (
+  "blue": $blue,
+  "green": $green,
+  "turquoise": $turquoise
+);
+
+---
+
+(stylesheet
+  (declaration
+    (variable)
+    (map_value
+      (map_pair
+        key: (string_value (string_content))
+        value: (variable))
+      (map_pair
+        key: (string_value (string_content))
+        value: (variable))
+      (map_pair
+        key: (string_value (string_content))
+        value: (variable))
+    )
+  )
+)
+
+=============================================
+Map On One Line
+=============================================
+
+$map: (1: 2, 3: 4);
+
+---
+
+(stylesheet
+  (declaration
+    (variable)
+    (map_value
+      (map_pair
+        key: (integer_value)
+        value: (integer_value))
+      (map_pair
+        key: (integer_value)
+        value: (integer_value))
+    )
+  )
+)

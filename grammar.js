@@ -56,7 +56,8 @@ module.exports = grammar(CSS, {
 
     // Selectors
 
-    selector_combinator: (_) => choice(prec.left('>'), prec.left('~'), prec.left('+')),
+    selector_combinator: _ =>
+      choice(prec.left('>'), prec.left('~'), prec.left('+')),
 
     _selector: ($, original) =>
       choice(
@@ -66,7 +67,7 @@ module.exports = grammar(CSS, {
         $.placeholder,
       ),
 
-    class_selector: ($) =>
+    class_selector: $ =>
       prec(
         1,
         seq(
@@ -76,7 +77,7 @@ module.exports = grammar(CSS, {
         ),
       ),
 
-    pseudo_class_selector: ($) =>
+    pseudo_class_selector: $ =>
       seq(
         optional($._selector),
         alias($._pseudo_class_selector_colon, ':'),
@@ -86,18 +87,21 @@ module.exports = grammar(CSS, {
 
     // Declarations
 
-    declaration: ($) =>
+    declaration: $ =>
       choice(
         seq(
           $.variable,
           ':',
           $._value,
           repeat(seq(optional(','), $._value)),
-          optional(choice($.global)),
+          optional(choice($.important, $.default, $.global)),
           ';',
         ),
         seq(
-          alias(choice($.identifier, $._concatenated_identifier), $.property_name),
+          alias(
+            choice($.identifier, $._concatenated_identifier),
+            $.property_name,
+          ),
           ':',
           $._value,
           repeat(seq(optional(','), $._value)),
@@ -115,23 +119,36 @@ module.exports = grammar(CSS, {
     _value: ($, original) =>
       choice(
         original,
-        prec(-1, choice($._concatenated_identifier, $.nesting_selector, $.list_value)),
+        prec(
+          -1,
+          choice($._concatenated_identifier, $.nesting_selector, $.list_value),
+        ),
         $.variable,
       ),
 
-    arguments: ($) =>
-      seq(token.immediate('('), optional(sep1(choice(',', ';'), repeat1($._value))), ')'),
+    arguments: $ =>
+      seq(
+        token.immediate('('),
+        optional(sep1(choice(',', ';'), repeat1($._value))),
+        ')',
+      ),
 
-    use_namespace: ($) => seq('as', choice('*', $.namespace)),
+    use_namespace: $ => seq('as', choice('*', $.namespace)),
 
-    use_statement: ($) => seq('@use', $.string_value, optional($.use_namespace), ';'),
+    use_statement: $ =>
+      seq('@use', $.string_value, optional($.use_namespace), ';'),
 
-    forward_statement: ($) => seq('@forward', $._value, ';'),
+    forward_statement: $ => seq('@forward', $._value, ';'),
 
-    mixin_statement: ($) =>
-      seq('@mixin', field('name', $.identifier), optional($.parameters), $.block),
+    mixin_statement: $ =>
+      seq(
+        '@mixin',
+        field('name', $.identifier),
+        optional($.parameters),
+        $.block,
+      ),
 
-    include_statement: ($) =>
+    include_statement: $ =>
       seq(
         '@include',
         $.identifier,
@@ -139,38 +156,52 @@ module.exports = grammar(CSS, {
         choice($.block, ';'),
       ),
 
-    _include_arguments: ($) =>
-      seq(token.immediate('('), sep1(',', alias($._include_argument, $.argument)), ')'),
+    _include_arguments: $ =>
+      seq(
+        token.immediate('('),
+        sep1(',', alias($._include_argument, $.argument)),
+        ')',
+      ),
 
-    _include_argument: ($) =>
-      seq(optional(seq(field('name', $.variable), ':')), field('value', $._include_value)),
+    _include_argument: $ =>
+      seq(
+        optional(seq(field('name', $.variable), ':')),
+        field('value', $._include_value),
+      ),
 
-    _include_value: ($) => seq($._value, repeat($._value)),
+    _include_value: $ => seq($._value, repeat($._value)),
 
-    function_statement: ($) =>
-      seq('@function', field('name', $.identifier), optional($.parameters), $.block),
+    function_statement: $ =>
+      seq(
+        '@function',
+        field('name', $.identifier),
+        optional($.parameters),
+        $.block,
+      ),
 
-    parameters: ($) => seq('(', sep1(',', $.parameter), ')'),
+    parameters: $ => seq('(', sep1(',', $.parameter), ')'),
 
-    parameter: ($) => seq($.variable, optional(seq(':', field('default', $._value)))),
+    parameter: $ =>
+      seq($.variable, optional(seq(':', field('default', $._value)))),
 
-    return_statement: ($) => seq('@return', $._value, ';'),
+    return_statement: $ => seq('@return', $._value, ';'),
 
-    extend_statement: ($) => seq('@extend', choice($._value, $.class_selector), ';'),
+    extend_statement: $ =>
+      seq('@extend', choice($._value, $.class_selector), ';'),
 
-    error_statement: ($) => seq('@error', $._value, ';'),
+    error_statement: $ => seq('@error', $._value, ';'),
 
-    warn_statement: ($) => seq('@warn', $._value, ';'),
+    warn_statement: $ => seq('@warn', $._value, ';'),
 
-    debug_statement: ($) => seq('@debug', $._value, ';'),
+    debug_statement: $ => seq('@debug', $._value, ';'),
 
-    at_root_statement: ($) => seq('@at-root', $._selector, $.block),
+    at_root_statement: $ => seq('@at-root', $._selector, $.block),
 
-    default: (_) => '!default',
+    default: _ => '!default',
 
-    global: (_) => '!global',
+    global: _ => '!global',
 
-    if_statement: ($) =>
+    if_statement: $ =>
       seq(
         '@if',
         field('condition', $._value),
@@ -179,11 +210,12 @@ module.exports = grammar(CSS, {
         optional($.else_clause),
       ),
 
-    else_if_clause: ($) => seq('@else', 'if', field('condition', $._value), $.block),
+    else_if_clause: $ =>
+      seq('@else', 'if', field('condition', $._value), $.block),
 
-    else_clause: ($) => seq('@else', $.block),
+    else_clause: $ => seq('@else', $.block),
 
-    each_statement: ($) =>
+    each_statement: $ =>
       seq(
         '@each',
         optional(seq(field('key', $.variable), ',')),
@@ -193,7 +225,7 @@ module.exports = grammar(CSS, {
         $.block,
       ),
 
-    for_statement: ($) =>
+    for_statement: $ =>
       seq(
         '@for',
         $.variable,
@@ -204,30 +236,41 @@ module.exports = grammar(CSS, {
         $.block,
       ),
 
-    while_statement: ($) => seq('@while', $._value, $.block),
+    while_statement: $ => seq('@while', $._value, $.block),
 
-    call_expression: ($) =>
-      seq(alias(choice($.identifier, $.plain_value), $.function_name), $.arguments),
-
-    binary_expression: ($) =>
-      prec.left(
-        seq($._value, choice('+', '-', '*', '/', '==', '<', '>', '!=', '<=', '>='), $._value),
+    call_expression: $ =>
+      seq(
+        alias(choice($.identifier, $.plain_value), $.function_name),
+        $.arguments,
       ),
 
-    list_value: ($) => seq('(', sep2(',', $._value), ')'),
+    binary_expression: $ =>
+      prec.left(
+        seq(
+          $._value,
+          choice('+', '-', '*', '/', '==', '<', '>', '!=', '<=', '>='),
+          $._value,
+        ),
+      ),
 
-    interpolation: ($) => seq('#{', $._value, '}'),
+    list_value: $ => seq('(', sep2(',', $._value), ')'),
 
-    placeholder: ($) => seq('%', $.identifier),
+    interpolation: $ => seq('#{', $._value, '}'),
 
-    _concatenated_identifier: ($) =>
+    placeholder: $ => seq('%', $.identifier),
+
+    _concatenated_identifier: $ =>
       choice(
         seq(
           $.identifier,
           repeat1(
             seq(
               $._concat,
-              choice($.interpolation, $.identifier, alias(token.immediate('-'), $.identifier)),
+              choice(
+                $.interpolation,
+                $.identifier,
+                alias(token.immediate('-'), $.identifier),
+              ),
             ),
           ),
         ),
@@ -236,15 +279,19 @@ module.exports = grammar(CSS, {
           repeat(
             seq(
               $._concat,
-              choice($.interpolation, $.identifier, alias(token.immediate('-'), $.identifier)),
+              choice(
+                $.interpolation,
+                $.identifier,
+                alias(token.immediate('-'), $.identifier),
+              ),
             ),
           ),
         ),
       ),
 
-    namespace: (_) => /[a-zA-Z_\xA0-\xFF][a-zA-Z0-9-_\xA0-\xFF]*/,
+    namespace: _ => /[a-zA-Z_\xA0-\xFF][a-zA-Z0-9-_\xA0-\xFF]*/,
 
-    variable: (_) => /([a-zA-Z_]+\.)?\$[a-zA-Z-_][a-zA-Z0-9-_]*/,
+    variable: _ => /([a-zA-Z_]+\.)?\$[a-zA-Z-_][a-zA-Z0-9-_]*/,
   },
 });
 
