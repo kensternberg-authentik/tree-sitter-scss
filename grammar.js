@@ -120,6 +120,7 @@ module.exports = grammar(CSS, {
       choice(
         original,
         $.escape_sequence,
+        $.map,
         prec(
           -1,
           choice($._concatenated_identifier, $.nesting_selector, $.list_value),
@@ -243,6 +244,19 @@ module.exports = grammar(CSS, {
       seq(
         alias(choice($.identifier, $.plain_value), $.function_name),
         $.arguments,
+      ),
+
+    map: $ => prec(2, seq('(', optional(sep1(',', $.map_pair)), ')')),
+
+    map_pair: $ =>
+      prec(
+        2,
+        seq(
+          alias($._value, $.key),
+          ':',
+          alias($._value, $.value),
+          optional($.default),
+        ),
       ),
 
     binary_expression: $ =>

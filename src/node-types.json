@@ -137,6 +137,10 @@
             "named": true
           },
           {
+            "type": "map",
+            "named": true
+          },
+          {
             "type": "nesting_selector",
             "named": true
           },
@@ -238,6 +242,10 @@
         },
         {
           "type": "list_value",
+          "named": true
+        },
+        {
+          "type": "map",
           "named": true
         },
         {
@@ -577,6 +585,10 @@
           "named": true
         },
         {
+          "type": "map",
+          "named": true
+        },
+        {
           "type": "namespace_selector",
           "named": true
         },
@@ -681,6 +693,10 @@
         },
         {
           "type": "list_value",
+          "named": true
+        },
+        {
+          "type": "map",
           "named": true
         },
         {
@@ -917,6 +933,10 @@
         },
         {
           "type": "list_value",
+          "named": true
+        },
+        {
+          "type": "map",
           "named": true
         },
         {
@@ -1173,6 +1193,10 @@
           "named": true
         },
         {
+          "type": "map",
+          "named": true
+        },
+        {
           "type": "nesting_selector",
           "named": true
         },
@@ -1253,6 +1277,10 @@
         },
         {
           "type": "list_value",
+          "named": true
+        },
+        {
+          "type": "map",
           "named": true
         },
         {
@@ -1435,6 +1463,10 @@
           "named": true
         },
         {
+          "type": "map",
+          "named": true
+        },
+        {
           "type": "nesting_selector",
           "named": true
         },
@@ -1525,6 +1557,10 @@
             "named": true
           },
           {
+            "type": "map",
+            "named": true
+          },
+          {
             "type": "nesting_selector",
             "named": true
           },
@@ -1611,6 +1647,10 @@
           "named": true
         },
         {
+          "type": "map",
+          "named": true
+        },
+        {
           "type": "nesting_selector",
           "named": true
         },
@@ -1690,6 +1730,10 @@
           "named": true
         },
         {
+          "type": "map",
+          "named": true
+        },
+        {
           "type": "nesting_selector",
           "named": true
         },
@@ -1766,6 +1810,10 @@
         },
         {
           "type": "list_value",
+          "named": true
+        },
+        {
+          "type": "map",
           "named": true
         },
         {
@@ -1859,6 +1907,10 @@
             "named": true
           },
           {
+            "type": "map",
+            "named": true
+          },
+          {
             "type": "nesting_selector",
             "named": true
           },
@@ -1926,6 +1978,10 @@
           },
           {
             "type": "list_value",
+            "named": true
+          },
+          {
+            "type": "map",
             "named": true
           },
           {
@@ -2016,6 +2072,10 @@
         },
         {
           "type": "list_value",
+          "named": true
+        },
+        {
+          "type": "map",
           "named": true
         },
         {
@@ -2126,6 +2186,10 @@
         },
         {
           "type": "list_value",
+          "named": true
+        },
+        {
+          "type": "map",
           "named": true
         },
         {
@@ -2283,6 +2347,10 @@
             "named": true
           },
           {
+            "type": "map",
+            "named": true
+          },
+          {
             "type": "nesting_selector",
             "named": true
           },
@@ -2386,6 +2454,10 @@
         },
         {
           "type": "list_value",
+          "named": true
+        },
+        {
+          "type": "map",
           "named": true
         },
         {
@@ -2511,6 +2583,89 @@
         },
         {
           "type": "list_value",
+          "named": true
+        },
+        {
+          "type": "map",
+          "named": true
+        },
+        {
+          "type": "nesting_selector",
+          "named": true
+        },
+        {
+          "type": "parenthesized_value",
+          "named": true
+        },
+        {
+          "type": "plain_value",
+          "named": true
+        },
+        {
+          "type": "string_value",
+          "named": true
+        },
+        {
+          "type": "variable",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "key",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "call_expression",
+          "named": true
+        },
+        {
+          "type": "color_value",
+          "named": true
+        },
+        {
+          "type": "escape_sequence",
+          "named": true
+        },
+        {
+          "type": "float_value",
+          "named": true
+        },
+        {
+          "type": "grid_value",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "important",
+          "named": true
+        },
+        {
+          "type": "integer_value",
+          "named": true
+        },
+        {
+          "type": "interpolation",
+          "named": true
+        },
+        {
+          "type": "list_value",
+          "named": true
+        },
+        {
+          "type": "map",
           "named": true
         },
         {
@@ -2654,6 +2809,10 @@
           "named": true
         },
         {
+          "type": "map",
+          "named": true
+        },
+        {
           "type": "nesting_selector",
           "named": true
         },
@@ -2671,6 +2830,44 @@
         },
         {
           "type": "variable",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "map",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "map_pair",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "map_pair",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "default",
+          "named": true
+        },
+        {
+          "type": "key",
+          "named": true
+        },
+        {
+          "type": "value",
           "named": true
         }
       ]
@@ -2900,6 +3097,10 @@
             "named": true
           },
           {
+            "type": "map",
+            "named": true
+          },
+          {
             "type": "nesting_selector",
             "named": true
           },
@@ -3040,6 +3241,10 @@
           "named": true
         },
         {
+          "type": "map",
+          "named": true
+        },
+        {
           "type": "nesting_selector",
           "named": true
         },
@@ -3131,6 +3336,10 @@
         },
         {
           "type": "list_value",
+          "named": true
+        },
+        {
+          "type": "map",
           "named": true
         },
         {
@@ -3387,6 +3596,10 @@
         },
         {
           "type": "list_value",
+          "named": true
+        },
+        {
+          "type": "map",
           "named": true
         },
         {
@@ -3933,6 +4146,85 @@
     }
   },
   {
+    "type": "value",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "call_expression",
+          "named": true
+        },
+        {
+          "type": "color_value",
+          "named": true
+        },
+        {
+          "type": "escape_sequence",
+          "named": true
+        },
+        {
+          "type": "float_value",
+          "named": true
+        },
+        {
+          "type": "grid_value",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "important",
+          "named": true
+        },
+        {
+          "type": "integer_value",
+          "named": true
+        },
+        {
+          "type": "interpolation",
+          "named": true
+        },
+        {
+          "type": "list_value",
+          "named": true
+        },
+        {
+          "type": "map",
+          "named": true
+        },
+        {
+          "type": "nesting_selector",
+          "named": true
+        },
+        {
+          "type": "parenthesized_value",
+          "named": true
+        },
+        {
+          "type": "plain_value",
+          "named": true
+        },
+        {
+          "type": "string_value",
+          "named": true
+        },
+        {
+          "type": "variable",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "warn_statement",
     "named": true,
     "fields": {},
@@ -3982,6 +4274,10 @@
         },
         {
           "type": "list_value",
+          "named": true
+        },
+        {
+          "type": "map",
           "named": true
         },
         {
@@ -4061,6 +4357,10 @@
         },
         {
           "type": "list_value",
+          "named": true
+        },
+        {
+          "type": "map",
           "named": true
         },
         {
