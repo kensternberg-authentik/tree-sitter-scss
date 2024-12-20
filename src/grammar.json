@@ -1883,6 +1883,10 @@
           }
         },
         {
+          "type": "SYMBOL",
+          "name": "escape_sequence"
+        },
+        {
           "type": "PREC",
           "value": -1,
           "content": {

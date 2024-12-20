@@ -119,6 +119,7 @@ module.exports = grammar(CSS, {
     _value: ($, original) =>
       choice(
         original,
+        $.escape_sequence,
         prec(
           -1,
           choice($._concatenated_identifier, $.nesting_selector, $.list_value),
