@@ -28,8 +28,43 @@ void tree_sitter_scss_external_scanner_deserialize(void *payload,
                                                    const char *buffer,
                                                    unsigned length) {}
 
+
+struct SkipInterpState {
+  bool maybe_new_interpolation;
+  int interpolation_depth;
+};  
+
+static bool scss_interp_skip(TSLexer *lexer, struct SkipInterpState *state) {
+  if (lexer->lookahead == '}') {
+    if (state->interpolation_depth > 0) {
+      state->interpolation_depth--;
+      return true;
+    }
+    return false;
+  }
+  
+  if ((state->maybe_new_interpolation) && (lexer->lookahead == '{')) {
+    state->interpolation_depth++;
+    state->maybe_new_interpolation = 0; // It gets one char to prove it's an interpolation.
+    return true;
+  }
+  
+  if (lexer->lookahead == '#') {
+    state->maybe_new_interpolation = 1;
+    return true;
+  }
+  
+  // Done worrying about entering an interpolation
+  state->maybe_new_interpolation = 0;
+  return false;
+}               
+
+
 bool tree_sitter_scss_external_scanner_scan(void *payload, TSLexer *lexer,
                                             const bool *valid_symbols) {
+
+  struct SkipInterpState skip_interp_state = { 0, 0 };
+  
     if (valid_symbols[ERROR_RECOVERY]) {
         return false;
     }
@@ -81,9 +116,6 @@ bool tree_sitter_scss_external_scanner_scan(void *payload, TSLexer *lexer,
         }
     }
 
-    bool maybe_new_interpolation = 0;
-    int interpolation_depth = 0;
-
     if (valid_symbols[PSEUDO_CLASS_SELECTOR_COLON]) {
         while (iswspace(lexer->lookahead)) {
             skip(lexer);
@@ -99,30 +131,15 @@ bool tree_sitter_scss_external_scanner_scan(void *payload, TSLexer *lexer,
             while (lexer->lookahead != ';' && !lexer->eof(lexer)) {
                  advance(lexer);
 
+                 if (scss_interp_skip(lexer, &skip_interp_state)) {
+                   continue;
+                 }
+                   
                  if (lexer->lookahead == '}') {
-                     if (interpolation_depth > 0) {
-                         interpolation_depth--;
-                         continue;
-                     } else {
-                         break;
-                     }
+                   break;
                  }
                  
-                 if ((maybe_new_interpolation) && (lexer->lookahead == '{')) {
-                     interpolation_depth++;
-                     maybe_new_interpolation = 0; // It gets one char to prove it's an interpolation.
-                     continue;
-                 }
-                 
-                 if (lexer->lookahead == '#') {
-                     maybe_new_interpolation = 1;
-                     continue;
-                 }
-                 
-                 // Done worrying about entering an interpolation
-                 maybe_new_interpolation = 0;
-                 
-                 if (lexer->lookahead == '{' && interpolation_depth == 0) {
+                 if (lexer->lookahead == '{' && skip_interp_state.interpolation_depth == 0) {
                      lexer->result_symbol = PSEUDO_CLASS_SELECTOR_COLON;
                      return true;
                  }
